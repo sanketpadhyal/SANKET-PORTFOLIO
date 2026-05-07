@@ -48,6 +48,26 @@ export const callAI = async (message, signal = null) => {
   }
 }
 
+export const callTicketAgent = async (message, jwtToken = null, signal = null) => {
+  assertApiBase()
+  const token = jwtToken || getJWTToken()
+  const response = await fetch(`${API_BASE}/ai/agent`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify({ message }),
+    signal: signal
+  })
+  const data = await response.json()
+  return {
+    ok: response.ok,
+    status: response.status,
+    data: data
+  }
+}
+
 
 export const authGoogle = async (token) => {
   assertApiBase()

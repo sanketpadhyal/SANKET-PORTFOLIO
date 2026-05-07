@@ -1,0 +1,611 @@
+.coffee-page {
+  padding: 124px 24px 88px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.coffee-shell {
+  width: min(100%, 720px);
+  margin: 0 auto;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 380ms ease, transform 380ms ease;
+}
+
+.coffee-shell.is-loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .coffee-shell {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.coffee-breadcrumb-current {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.coffee-breadcrumb-icon {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.coffee-header {
+  text-align: center;
+  margin-top: 40px;
+  margin-bottom: 48px;
+}
+
+.coffee-profile-container {
+  display: inline-block;
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin-bottom: 24px;
+}
+
+.coffee-profile-photo {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow:
+    0 12px 24px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.8);
+}
+
+.coffee-title {
+  margin: 0 0 12px;
+  color: #171717;
+  font-size: clamp(34px, 5vw, 48px);
+  line-height: 0.98;
+  letter-spacing: -0.015em;
+  font-weight: 800;
+}
+
+.coffee-title-highlight {
+  color: #f4b400;
+}
+
+.coffee-subtitle {
+  color: var(--nav-text-muted, #666);
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.coffee-card {
+  background: rgba(255, 255, 255, 0.74);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  padding: 32px;
+  border-radius: 30px;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 28px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.94),
+    0 20px 40px rgba(0, 0, 0, 0.08),
+    0 10px 22px rgba(0, 0, 0, 0.04);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.coffee-amount-title {
+  font-size: 20px;
+  margin: 0 0 16px;
+  color: #171717;
+  font-weight: 700;
+}
+
+.coffee-amount-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.coffee-amount-buttons-single {
+  grid-template-columns: 1fr;
+}
+
+.coffee-amount-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 0;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(17, 17, 17, 0.08);
+  font-weight: 600;
+  font-size: 18px;
+  color: #171717;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.coffee-amount-btn-fixed {
+  min-height: 220px;
+  padding: 18px;
+  align-items: flex-start;
+  justify-content: space-between;
+  text-align: left;
+  color: #111827;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0) 24%),
+    linear-gradient(145deg, #ffeaa0 0%, #ffd633 58%, #ffcd14 100%);
+  border-color: rgba(17, 24, 39, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 20px 36px rgba(225, 179, 23, 0.2);
+  transition: box-shadow 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.coffee-amount-card-top,
+.coffee-amount-card-bottom {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.coffee-amount-card-body {
+  display: grid;
+  gap: 8px;
+}
+
+.coffee-amount-icon-wrap {
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.42);
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+.coffee-amount-chip {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(17, 24, 39, 0.08);
+  color: rgba(17, 24, 39, 0.68);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.coffee-amount-label {
+  display: block;
+  max-width: 5ch;
+  font-size: 18px;
+  line-height: 1.05;
+  font-weight: 800;
+  color: #111827;
+}
+
+html[data-theme="dark"] .coffee-amount-label {
+  color: #111827;
+}
+
+.coffee-amount-caption {
+  font-size: 13px;
+  line-height: 1.45;
+  color: rgba(17, 24, 39, 0.64);
+}
+
+.coffee-amount-btn-fixed strong {
+  font-size: 48px;
+  line-height: 0.92;
+  font-weight: 800;
+  color: #111827;
+}
+
+.coffee-amount-unit {
+  color: rgba(17, 24, 39, 0.62);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.coffee-amount-label-emphasis {
+  font-style: italic;
+}
+
+.coffee-amount-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.coffee-amount-btn:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.76),
+    0 22px 40px rgba(225, 179, 23, 0.24);
+}
+
+.coffee-amount-btn.selected {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 24%),
+    linear-gradient(145deg, #ffe78d 0%, #ffd22b 58%, #ffc90f 100%);
+  border-color: rgba(183, 134, 0, 0.34);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    0 22px 42px rgba(225, 179, 23, 0.28);
+}
+
+.coffee-custom-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 650;
+  color: rgba(23, 23, 23, 0.72);
+  margin: 4px 0 10px;
+  letter-spacing: 0.01em;
+}
+
+.coffee-custom-field {
+  display: flex;
+  align-items: stretch;
+  border-radius: 16px;
+  border: 1px solid rgba(17, 17, 17, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.coffee-custom-field.is-invalid {
+  border-color: rgba(220, 38, 38, 0.65);
+  box-shadow: inset 0 2px 4px rgba(220, 38, 38, 0.06), 0 0 0 1px rgba(220, 38, 38, 0.12);
+}
+
+.coffee-custom-hint {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: rgba(23, 23, 23, 0.58);
+}
+
+.coffee-custom-hint.is-invalid {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+.coffee-custom-prefix {
+  flex: 0 0 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 750;
+  font-size: 18px;
+  line-height: 1;
+  color: rgba(23, 23, 23, 0.7);
+  background: rgba(255, 255, 255, 0.5);
+  border-right: 1px solid rgba(17, 17, 17, 0.08);
+}
+
+.coffee-custom-input {
+  flex: 1;
+  min-width: 0;
+  padding: 16px 16px;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  color: #171717;
+}
+
+.coffee-custom-input:focus {
+  outline: none;
+}
+
+.coffee-support-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.coffee-checkout {
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
+  padding-left: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.coffee-summary {
+  margin-bottom: 18px;
+}
+
+.coffee-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #171717;
+  margin-bottom: 24px;
+}
+
+.coffee-total-value {
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.coffee-note {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: rgba(23, 23, 23, 0.62);
+}
+
+.coffee-support-btn {
+  width: 100%;
+  padding: 18px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #151515 0%, #2a2a2a 100%);
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 18px 36px rgba(0, 0, 0, 0.18);
+  transition: box-shadow 0.2s;
+}
+
+.coffee-support-btn:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 22px 42px rgba(0, 0, 0, 0.24);
+}
+
+.coffee-help-btn {
+  width: 100%;
+  min-height: 52px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  border: 1px solid rgba(17, 17, 17, 0.08);
+  background: rgba(255, 255, 255, 0.78);
+  color: #171717;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.94),
+    0 10px 20px rgba(0, 0, 0, 0.06);
+  transition: border-color 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+}
+
+.coffee-help-btn:hover {
+  border-color: rgba(17, 17, 17, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+.coffee-support-actions {
+  display: grid;
+  gap: 10px;
+}
+
+html[data-theme="dark"] .coffee-title {
+  color: #f5f5f5;
+}
+
+html[data-theme="dark"] .coffee-title-accent {
+  color: rgba(245, 245, 245, 0.4);
+}
+
+html[data-theme="dark"] .coffee-title-highlight {
+  color: #ffd54f;
+}
+
+html[data-theme="dark"] .coffee-card {
+  background: rgba(255, 255, 255, 0.035);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 22px 42px rgba(0, 0, 0, 0.24),
+    0 10px 24px rgba(0, 0, 0, 0.18);
+}
+
+html[data-theme="dark"] .coffee-amount-title {
+  color: #f5f5f5;
+}
+
+html[data-theme="dark"] .coffee-amount-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #f5f5f5;
+}
+
+html[data-theme="dark"] .coffee-amount-btn-fixed {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 24%),
+    linear-gradient(145deg, #ffe17a 0%, #f9ca1f 58%, #e9ba12 100%);
+  border-color: rgba(255, 214, 51, 0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    0 20px 38px rgba(0, 0, 0, 0.26);
+}
+
+html[data-theme="dark"] .coffee-amount-icon-wrap {
+  background: rgba(255, 255, 255, 0.26);
+  border-color: rgba(17, 24, 39, 0.08);
+}
+
+html[data-theme="dark"] .coffee-amount-chip {
+  background: rgba(17, 24, 39, 0.1);
+  color: rgba(17, 24, 39, 0.7);
+}
+
+html[data-theme="dark"] .coffee-amount-btn-fixed strong {
+  color: #171717;
+}
+
+html[data-theme="dark"] .coffee-amount-caption,
+html[data-theme="dark"] .coffee-amount-unit {
+  color: rgba(17, 24, 39, 0.66);
+}
+
+html[data-theme="dark"] .coffee-amount-btn.selected {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 24%),
+    linear-gradient(145deg, #ffe17a 0%, #f4c400 58%, #d9aa00 100%);
+  color: #000;
+  border-color: rgba(217, 170, 0, 0.38);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    0 18px 34px rgba(0, 0, 0, 0.22);
+}
+
+html[data-theme="dark"] .coffee-custom-label {
+  color: rgba(245, 245, 245, 0.7);
+}
+
+html[data-theme="dark"] .coffee-custom-field {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+html[data-theme="dark"] .coffee-custom-field.is-invalid {
+  border-color: rgba(248, 113, 113, 0.72);
+  box-shadow: inset 0 2px 4px rgba(248, 113, 113, 0.08), 0 0 0 1px rgba(248, 113, 113, 0.14);
+}
+
+html[data-theme="dark"] .coffee-custom-prefix {
+  color: rgba(245, 245, 245, 0.74);
+  background: rgba(255, 255, 255, 0.02);
+  border-right-color: rgba(255, 255, 255, 0.08);
+}
+
+html[data-theme="dark"] .coffee-custom-input {
+  color: #f5f5f5;
+}
+
+html[data-theme="dark"] .coffee-custom-hint {
+  color: rgba(245, 245, 245, 0.58);
+}
+
+html[data-theme="dark"] .coffee-custom-hint.is-invalid {
+  color: #f87171;
+}
+
+html[data-theme="dark"] .coffee-checkout {
+  border-left-color: rgba(255, 255, 255, 0.1);
+}
+
+html[data-theme="dark"] .coffee-total {
+  color: #f5f5f5;
+}
+
+html[data-theme="dark"] .coffee-note {
+  color: rgba(245, 245, 245, 0.62);
+}
+
+html[data-theme="dark"] .coffee-support-btn {
+  background: linear-gradient(135deg, #f3f4f7 0%, #d8dde7 100%);
+  color: #171717;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.84), 0 18px 36px rgba(0, 0, 0, 0.24);
+}
+
+html[data-theme="dark"] .coffee-help-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: rgba(245, 245, 245, 0.9);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 10px 20px rgba(0, 0, 0, 0.26);
+}
+
+html[data-theme="dark"] .coffee-help-btn:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 12px 24px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+  .coffee-page {
+    padding-top: 104px;
+  }
+  .coffee-card {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .coffee-checkout {
+    border-left: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    padding-left: 0;
+    padding-top: 22px;
+  }
+
+  .coffee-support-actions {
+    gap: 8px;
+  }
+
+  .coffee-help-btn {
+    min-height: 48px;
+    border-radius: 16px;
+  }
+
+  html[data-theme="dark"] .coffee-checkout {
+    border-top-color: rgba(255, 255, 255, 0.1);
+  }
+  .coffee-amount-buttons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .coffee-amount-btn-fixed {
+    min-height: 204px;
+    padding: 16px;
+  }
+
+  .coffee-amount-label {
+    font-size: 17px;
+  }
+
+  .coffee-amount-btn-fixed strong {
+    font-size: 42px;
+  }
+
+  .coffee-amount-chip {
+    font-size: 10px;
+    padding: 6px 8px;
+  }
+
+  .coffee-custom-prefix {
+    flex-basis: 40px;
+    font-size: 17px;
+  }
+
+  .coffee-custom-input {
+    padding-left: 14px;
+  }
+}

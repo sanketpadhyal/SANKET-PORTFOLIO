@@ -1,0 +1,486 @@
+.edu-exp-page{
+  padding:120px 20px 48px;
+}
+
+.edu-exp-wrap{
+  width:min(100%, 1080px);
+  margin:0 auto;
+  display:grid;
+  gap:22px;
+}
+
+.edu-exp-header{
+  display:grid;
+  gap:12px;
+  width:min(100%, 760px);
+  align-items:start;
+}
+
+.edu-exp-badge,
+.edu-exp-chip{
+  width:max-content;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid rgba(17,17,17,0.08);
+  background:rgba(255,255,255,0.82);
+  color:#171717;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  box-shadow:0 10px 24px rgba(0,0,0,0.05);
+}
+
+.edu-exp-chip svg{
+  color:#FFD700;
+}
+
+.edu-exp-title{
+  margin:0;
+  color:#161616;
+  font-size:clamp(32px, 5vw, 58px);
+  line-height:0.98;
+  letter-spacing:-0.02em;
+  max-width:14ch;
+}
+
+.edu-exp-title-accent{
+  color:rgba(34, 60, 255, 0.78);
+}
+
+.edu-exp-copy{
+  margin:0;
+  max-width:680px;
+  color:var(--nav-text-muted);
+  font-size:15px;
+  line-height:1.68;
+  background:rgba(255,255,255,0.9);
+  border:1px solid rgba(17,17,17,0.1);
+  border-radius:12px;
+  padding:16px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.05);
+}
+
+.edu-exp-layout{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:18px;
+}
+
+.edu-exp-block{
+  min-width:0;
+  padding:18px;
+  border-radius:26px;
+  border:1px solid rgba(17,17,17,0.07);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.88) 0%, rgba(250,250,250,0.92) 100%);
+  box-shadow:
+    0 18px 40px rgba(0,0,0,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.92);
+}
+
+.edu-exp-block-head{
+  display:grid;
+  gap:8px;
+  margin-bottom:14px;
+}
+
+.edu-exp-block-title{
+  margin:0;
+  color: rgba(34, 60, 255, 0.78);
+  font-size:26px;
+  line-height:1.02;
+  letter-spacing:-0.015em;
+}
+
+.edu-exp-block-title.education{
+  color: var(--nav-text);
+}
+
+.edu-exp-block-copy{
+  margin:0;
+  color:var(--nav-text-muted);
+  font-size:13.5px;
+  line-height:1.58;
+}
+
+.edu-exp-track{
+  position:relative;
+  display:grid;
+  gap:12px;
+}
+
+.edu-exp-track::before{
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:7px;
+  width:2px;
+  background:linear-gradient(180deg, rgba(62, 95, 255, 0.34), rgba(17,17,17,0.08));
+}
+
+.edu-exp-step{
+  position:relative;
+  display:grid;
+  grid-template-columns:18px minmax(0, 1fr);
+  gap:10px;
+  opacity:0;
+  transform:translate3d(0, 22px, 0);
+  transition:
+    opacity 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.edu-exp-page.visible .edu-exp-step,
+.edu-exp-page.visible .edu-exp-header{
+  opacity:1;
+  transform:translate3d(0, 0, 0);
+}
+
+.edu-exp-header{
+  opacity:0;
+  transform:translate3d(0, 18px, 0);
+  transition:
+    opacity 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.edu-exp-step-line{
+  position:relative;
+  display:flex;
+  justify-content:center;
+}
+
+.edu-exp-step-dot{
+  width:14px;
+  height:14px;
+  margin-top:14px;
+  border-radius:999px;
+  background:linear-gradient(180deg, #4c68ff, #223cff);
+  box-shadow:
+    0 0 0 4px rgba(76, 104, 255, 0.12),
+    0 8px 16px rgba(34, 60, 255, 0.16);
+  position:relative;
+  z-index:1;
+}
+
+.edu-exp-step-card{
+  min-width:0;
+  padding:14px;
+  border-radius:20px;
+  border:1px solid rgba(17,17,17,0.06);
+  background:#ffffff;
+  box-shadow:
+    0 10px 24px rgba(0,0,0,0.05),
+    inset 0 1px 0 rgba(255,255,255,0.94);
+}
+
+.edu-exp-step-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+
+.edu-exp-step-status{
+  display:inline-flex;
+  align-items:center;
+  min-height:24px;
+  padding:0 9px;
+  border-radius:999px;
+  background:rgba(76,104,255,0.1);
+  color:#3550e8;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+}
+
+.edu-exp-step-meta{
+  color:rgba(23,23,23,0.48);
+  font-size:11.5px;
+  font-weight:700;
+  line-height:1.4;
+}
+
+.edu-exp-step-title{
+  margin:0;
+  color:#161616;
+  font-size:21px;
+  line-height:1.08;
+  letter-spacing:-0.04em;
+}
+
+.edu-exp-step-place{
+  margin:6px 0 0;
+  color:#4c4c4c;
+  font-size:13px;
+  font-weight:700;
+  line-height:1.45;
+}
+
+.edu-exp-points{
+  margin:10px 0 0;
+  padding:0;
+  list-style:none;
+  display:grid;
+  gap:7px;
+}
+
+.edu-exp-points li{
+  position:relative;
+  padding-left:13px;
+  color:#505050;
+  font-size:12.5px;
+  line-height:1.5;
+  margin-bottom:12px;
+}
+
+.edu-exp-points li::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:7px;
+  width:5px;
+  height:5px;
+  border-radius:999px;
+  background:#161616;
+  opacity:0.72;
+}
+
+html[data-theme="dark"] .edu-exp-badge,
+html[data-theme="dark"] .edu-exp-chip{
+  background:rgba(255,255,255,0.05);
+  border-color:rgba(255,255,255,0.08);
+  color:#f5f5f5;
+  box-shadow:none;
+}
+
+html[data-theme="dark"] .edu-exp-title{
+  color:#f5f5f5;
+}
+
+html[data-theme="dark"] .edu-exp-block-title.education{
+  color:#f5f5f5;
+}
+
+html[data-theme="dark"] .edu-exp-step-title{
+  color:#f5f5f5;
+}
+
+html[data-theme="dark"] .edu-exp-title-accent{
+  color:#93a5ff;
+}
+
+html[data-theme="dark"] .edu-exp-copy{
+  background:rgba(0,0,0,0.2);
+  border-color:rgba(255,255,255,0.1);
+  color:rgba(245,245,245,0.8);
+}
+
+html[data-theme="dark"] .edu-exp-block{
+  border-color:rgba(255,255,255,0.08);
+  background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.025));
+  box-shadow:
+    0 18px 40px rgba(0,0,0,0.22),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+html[data-theme="dark"] .edu-exp-track::before{
+  background:linear-gradient(180deg, rgba(110, 131, 255, 0.46), rgba(255,255,255,0.08));
+}
+
+html[data-theme="dark"] .edu-exp-step-card{
+  background:rgba(255,255,255,0.04);
+  border-color:rgba(255,255,255,0.08);
+  box-shadow:none;
+}
+
+html[data-theme="dark"] .edu-exp-step-meta{
+  color:rgba(245,245,245,0.5);
+}
+
+html[data-theme="dark"] .edu-exp-step-place{
+  color:rgba(245,245,245,0.72);
+}
+
+html[data-theme="dark"] .edu-exp-points li{
+  color:#f5f5f5;
+}
+
+html[data-theme="dark"] .edu-exp-points li::before{
+  background:#ffffff;
+}
+
+@media (max-width: 900px){
+  .edu-exp-page{
+    padding:106px 16px 34px;
+  }
+
+  .edu-exp-layout{
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+
+  .edu-exp-block{
+    padding:14px;
+    border-radius:22px;
+  }
+
+  .edu-exp-block-title{
+    font-size:22px;
+  }
+
+  .edu-exp-header{
+    text-align:center;
+  }
+}
+
+@media (max-width: 640px){
+  .edu-exp-page{
+    padding:104px 10px 24px;
+  }
+
+  .edu-exp-wrap{
+    gap:14px;
+  }
+
+  .edu-exp-header{
+    gap:8px;
+    text-align:center;
+  }
+
+  .edu-exp-title{
+    max-width:none;
+    font-size:28px;
+    line-height:1.02;
+  }
+
+  .edu-exp-copy{
+    font-size:12.5px;
+    line-height:1.5;
+  }
+
+  .edu-exp-badge,
+  .edu-exp-chip{
+    padding:6px 10px;
+    font-size:9.5px;
+    gap:6px;
+  }
+
+  .edu-exp-layout{
+    gap:10px;
+  }
+
+  .edu-exp-block{
+    padding:10px;
+    border-radius:16px;
+    box-shadow:none;
+  }
+
+  .edu-exp-block-head{
+    gap:6px;
+    margin-bottom:10px;
+  }
+
+  .edu-exp-block-title{
+    font-size:18px;
+  }
+
+  .edu-exp-block-copy{
+    font-size:11.5px;
+    line-height:1.45;
+  }
+
+  .edu-exp-track{
+    gap:8px;
+  }
+
+  .edu-exp-track::before{
+    left:5px;
+  }
+
+  .edu-exp-step{
+    grid-template-columns:12px minmax(0, 1fr);
+    gap:6px;
+  }
+
+  .edu-exp-step-dot{
+    width:10px;
+    height:10px;
+    margin-top:12px;
+    box-shadow:
+      0 0 0 3px rgba(76, 104, 255, 0.12),
+      0 6px 12px rgba(34, 60, 255, 0.12);
+  }
+
+  .edu-exp-step-card{
+    padding:10px;
+    border-radius:12px;
+    box-shadow:none;
+  }
+
+  .edu-exp-step-top{
+    margin-bottom:8px;
+    gap:5px;
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .edu-exp-step-status{
+    min-height:20px;
+    padding:0 7px;
+    font-size:9px;
+  }
+
+  .edu-exp-step-meta{
+    font-size:10px;
+  }
+
+  .edu-exp-step-title{
+    font-size:15px;
+  }
+
+  .edu-exp-step-place{
+    margin-top:4px;
+    font-size:11.5px;
+  }
+
+  .edu-exp-points{
+    margin-top:8px;
+    gap:5px;
+  }
+
+  .edu-exp-points li{
+    padding-left:11px;
+    font-size:11.5px;
+    line-height:1.42;
+    margin-bottom:16px;
+  }
+
+  .edu-exp-points li::before{
+    top:6px;
+    width:4px;
+    height:4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .edu-exp-header,
+  .edu-exp-step{
+    opacity:1;
+    transform:none;
+    transition:none;
+  }
+}
+
+html[data-performance="low"] .edu-exp-block,
+html[data-performance="low"] .edu-exp-step-card{
+  box-shadow:none !important;
+}

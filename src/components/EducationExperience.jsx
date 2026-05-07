@@ -24,17 +24,6 @@ const educationTimeline = [
       "Built small personal web projects to strengthen fundamentals through practice.",
       "Used the period after 12th to move more seriously into web development."
     ]
-  },
-  {
-    phase: "B.Tech - Computer Science",
-    place: "SVKM College of Engineering, Shirpur-Dahivad",
-    meta: "Currently in 1st Year",
-    status: "In Progress",
-    points: [
-      "Continuing to strengthen full stack skills alongside academics.",
-      "Actively building personal projects to improve execution and product thinking.",
-      "Learning modern frameworks, tooling, and practical engineering workflows."
-    ]
   }
 ]
 

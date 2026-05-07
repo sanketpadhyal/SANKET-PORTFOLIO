@@ -1,8 +1,27 @@
 # Sanket Padhyal Portfolio
 
+<img src="public/assets/sanket.webp" alt="Sanket Padhyal" width="180" />
+
+[![Live Website](https://img.shields.io/badge/Live-sanketpadhyal.world-2ea44f?style=for-the-badge)](https://sanketpadhyal.world)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
+[![Built with React](https://img.shields.io/badge/Built%20with-React-61dafb?style=for-the-badge&logo=react&logoColor=111)](https://react.dev)
+
 Open-source full-stack portfolio for Sanket Padhyal — built as a polished personal website with project showcases, AI chat, contact tickets, coffee support, admin tools, and a public leaderboard.
 
 The app includes a React frontend and an Express backend, with Firebase, Cloudinary, JWT authentication, WebAuthn passkeys, Groq AI, and protected API routes. Private keys, deployment credentials, and payment configuration are intentionally kept outside the repository.
+
+## Live Demo
+
+Visit the production website: **[sanketpadhyal.world](https://sanketpadhyal.world)**
+
+If this project helps you learn, build, or ship something faster, a star would genuinely mean a lot.
+
+## Why This Project
+
+- Built as a real deployed portfolio, not just a static landing page.
+- Includes production-style flows for auth, support tickets, admin actions, passkeys, uploads, AI, and leaderboard records.
+- Keeps secrets out of source control while providing safe `.env.example` templates for setup.
+- Designed to be readable, reusable, and easy to fork for other developer portfolios.
 
 ## Features
 

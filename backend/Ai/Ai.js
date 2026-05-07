@@ -17,6 +17,7 @@ const getNextApiKey = () => {
 
   const key = API_KEYS[currentApiIndex]
   currentApiIndex = (currentApiIndex + 1) % API_KEYS.length
+
   return key
 }
 
@@ -26,6 +27,7 @@ const aiLimiter = rateLimit({
   keyGenerator: (req) => {
     const ip = ipKeyGenerator(req.ip)
     const msg = req.body?.message?.slice(0, 10) || "anon"
+
     return `${ip}:${msg}`
   },
   message: {
@@ -40,14 +42,24 @@ router.post("/", aiLimiter, async (req, res) => {
     const { message } = req.body
 
     if (!message || typeof message !== "string") {
-      return res.status(400).json({ error: "Invalid message" })
+      return res.status(400).json({
+        error: "Invalid message"
+      })
+    }
+
+    if (!message.trim()) {
+      return res.status(400).json({
+        error: "Message required"
+      })
     }
 
     if (message.length > 500) {
-      return res.status(400).json({ error: "Message too long" })
+      return res.status(400).json({
+        error: "Message too long"
+      })
     }
 
-    await new Promise((r) => setTimeout(r, 400))
+    await new Promise((resolve) => setTimeout(resolve, 400))
 
     const API_KEY = getNextApiKey()
 
@@ -56,7 +68,7 @@ router.post("/", aiLimiter, async (req, res) => {
       {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${API_KEY}`,
+          Authorization: `Bearer ${API_KEY}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
@@ -64,13 +76,23 @@ router.post("/", aiLimiter, async (req, res) => {
           messages: [
             {
               role: "system",
-              content: `You are a helpful AI assistant. Answer user questions clearly and concisely.
+              content: `
+You are a helpful AI assistant.
 
-If a user asks where they can add data to train the AI or share data for review, tell them to use the Contact page on the site and send their details there. If needed, mention that this is the place to submit feedback or information for the project owner to review manually.`
+Answer clearly, naturally, and concisely.
+
+If a user asks:
+- how to share data
+- how to train the AI
+- how to submit feedback
+- how to send information for review
+
+tell them to use the Contact page on the website and submit their details there for manual review.
+              `
             },
             {
               role: "user",
-              content: message
+              content: message.trim()
             }
           ]
         })
@@ -80,17 +102,26 @@ If a user asks where they can add data to train the AI or share data for review,
     const data = await response.json()
 
     if (!response.ok) {
-      console.error("Groq error:", data)
-      return res.json({ reply: data.error?.message || "API error" })
+      console.error("Groq API Error:", data)
+
+      return res.status(response.status).json({
+        error: data.error?.message || "AI request failed"
+      })
     }
 
-    const reply = data.choices?.[0]?.message?.content || "No response"
+    const reply =
+      data?.choices?.[0]?.message?.content || "No response generated"
 
-    res.json({ reply })
+    return res.status(200).json({
+      reply
+    })
 
   } catch (err) {
-    console.error("Server error:", err)
-    res.json({ reply: "Server error" })
+    console.error("Server Error:", err)
+
+    return res.status(500).json({
+      error: "Internal server error"
+    })
   }
 })
 

@@ -12,8 +12,8 @@ import {
   UserRound
 } from "lucide-react"
 import { onAuthStateChanged } from "firebase/auth"
-import { auth, signOutUser } from "../firebase"
-import { getProfile, getTickets, updateProfile, createTicket, clearJWTToken } from "../api-calls/apicalls"
+import { auth, signInWithGoogle, signOutUser } from "../firebase"
+import { authGoogle, getProfile, getTickets, updateProfile, createTicket, clearJWTToken } from "../api-calls/apicalls"
 import "./TicketsPage.css"
 
 const slugifyUsername = (value) =>
@@ -152,7 +152,6 @@ const clearPersistedAuthState = () => {
   }
 }
 
-
 export default function TicketsPage() {
   const [authUser, setAuthUser] = useState(null)
   const [authReady, setAuthReady] = useState(false)
@@ -171,9 +170,12 @@ export default function TicketsPage() {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
   const [isSignOutConfirmOpen, setIsSignOutConfirmOpen] = useState(false)
   const [isSigningOut, setIsSigningOut] = useState(false)
+  const [isSigningIn, setIsSigningIn] = useState(false)
+  const [signInError, setSignInError] = useState("")
   const [activeTicketThread, setActiveTicketThread] = useState(null)
   const [isThreadClosing, setIsThreadClosing] = useState(false)
   const [isCreatingTicket, setIsCreatingTicket] = useState(false)
+  const [composerPreview, setComposerPreview] = useState(null)
   const [ticketCreateError, setTicketCreateError] = useState("")
   const [isSavingProfile, setIsSavingProfile] = useState(false)
   const [saveStatus, setSaveStatus] = useState("")
@@ -188,12 +190,6 @@ export default function TicketsPage() {
   const profileMenuRef = useRef(null)
 
   useEffect(() => {
-    if (!auth) {
-      setAuthReady(true)
-      setAuthUser(null)
-      return undefined
-    }
-
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setAuthUser(user)
       setAuthReady(true)
@@ -408,6 +404,22 @@ export default function TicketsPage() {
     }
   }, [])
 
+  useEffect(() => {
+    if (!authUser) {
+      return undefined
+    }
+
+    const handleTicketAgentUpdate = () => {
+      void fetchTickets(authUser)
+    }
+
+    window.addEventListener("tickets-agent-updated", handleTicketAgentUpdate)
+
+    return () => {
+      window.removeEventListener("tickets-agent-updated", handleTicketAgentUpdate)
+    }
+  }, [authUser, fetchTickets])
+
   const saveProfile = async (nextProfile) => {
     if (!authUser) return
 
@@ -468,6 +480,7 @@ export default function TicketsPage() {
   }
 
   const handleDraftChange = (field, value) => {
+    setComposerPreview(null)
     setDraft((current) => ({
       ...current,
       [field]: value
@@ -488,6 +501,12 @@ export default function TicketsPage() {
     const details = draft.details.trim()
 
     if (!title || !details || isCreatingTicket) return
+
+    if (!composerPreview || composerPreview.title !== title || composerPreview.details !== details) {
+      setTicketCreateError("")
+      setComposerPreview({ title, details })
+      return
+    }
 
     setIsCreatingTicket(true)
     setTicketCreateError("")
@@ -519,6 +538,7 @@ export default function TicketsPage() {
         showProfilePhoto: profile.showProfilePhoto ?? true,
         showUsername: profile.showUsername ?? true
       })
+      setComposerPreview(null)
       setIsComposerOpen(false)
     } catch (error) {
       setTicketCreateError(error?.message || "Unable to create ticket right now.")
@@ -538,24 +558,47 @@ export default function TicketsPage() {
 
     try {
       clearJWTToken()
-      
+
       try {
         await signOutUser()
       } catch (error) {
         console.error("Firebase sign out error:", error)
       }
-      
+
       clearPersistedAuthState()
-      
     } catch (error) {
       console.error("Sign out process error:", error)
     } finally {
       setIsSignOutConfirmOpen(false)
       setIsSigningOut(false)
-      
+
       setTimeout(() => {
         window.location.href = "/contact"
       }, 200)
+    }
+  }
+
+  const handleSignIn = async () => {
+    if (isSigningIn) {
+      return
+    }
+
+    setSignInError("")
+    setIsSigningIn(true)
+
+    try {
+      const result = await signInWithGoogle()
+      const token = await result.user.getIdToken()
+      const res = await authGoogle(token)
+
+      if (!res.ok) {
+        throw new Error(res.data?.error || "Unable to complete sign in.")
+      }
+    } catch (error) {
+      console.error("Tickets sign in failed:", error)
+      setSignInError("Login could not be completed. Please try again.")
+    } finally {
+      setIsSigningIn(false)
     }
   }
 
@@ -564,13 +607,12 @@ export default function TicketsPage() {
       return
     }
 
-    window.history.pushState({}, "", "/contact")
+    window.history.replaceState({}, "", "/contact")
     try {
       window.dispatchEvent(new PopStateEvent("popstate"))
     } catch {
       window.dispatchEvent(new Event("popstate"))
     }
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" })
   }, [authReady, authUser])
 
   if (!authReady) {
@@ -588,8 +630,36 @@ export default function TicketsPage() {
     return (
       <main className="tickets-page">
         <section className="tickets-shell tickets-state-card">
-          <div className="tickets-inline-loader" aria-hidden="true" />
-          <p className="tickets-state-text">Redirecting to secure contact access</p>
+          <h1 className="tickets-state-title">Log in to view tickets</h1>
+          <p className="tickets-state-text">
+            Please log in on the Tickets page first. After login, you can create tickets,
+            read replies, and manage your private requests.
+          </p>
+          <button
+            type="button"
+            className="tickets-google-button"
+            onClick={handleSignIn}
+            disabled={isSigningIn}
+          >
+            {isSigningIn ? (
+              <span className="tickets-button-loader" aria-hidden="true" />
+            ) : (
+              <span className="tickets-google-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" className="tickets-google-svg">
+                  <path fill="#4285F4" d="M21.6 12.23c0-.7-.06-1.37-.18-2.01H12v3.81h5.39a4.61 4.61 0 0 1-2 3.03v2.52h3.24c1.9-1.75 2.97-4.34 2.97-7.35Z" />
+                  <path fill="#34A853" d="M12 22c2.7 0 4.97-.89 6.63-2.42l-3.24-2.52c-.9.6-2.06.95-3.39.95-2.6 0-4.8-1.76-5.58-4.12H3.07v2.6A10 10 0 0 0 12 22Z" />
+                  <path fill="#FBBC05" d="M6.42 13.89A5.96 5.96 0 0 1 6.11 12c0-.66.11-1.29.31-1.89V7.51H3.07A10 10 0 0 0 2 12c0 1.61.39 3.13 1.07 4.49l3.35-2.6Z" />
+                  <path fill="#EA4335" d="M12 5.99c1.47 0 2.8.51 3.84 1.52l2.88-2.88C16.96 2.99 14.69 2 12 2A10 10 0 0 0 3.07 7.51l3.35 2.6c.78-2.36 2.98-4.12 5.58-4.12Z" />
+                </svg>
+              </span>
+            )}
+            <span>{isSigningIn ? "Signing in..." : "Continue with Google"}</span>
+          </button>
+          {signInError ? (
+            <p className="tickets-create-error" role="alert">
+              {signInError}
+            </p>
+          ) : null}
         </section>
       </main>
     )
@@ -1077,6 +1147,17 @@ export default function TicketsPage() {
                 />
               </label>
 
+              {composerPreview ? (
+                <div className="tickets-preview-panel" role="status" aria-live="polite">
+                  <p className="tickets-composer-preferences-kicker">Ticket preview</p>
+                  <p className="tickets-preview-title">{composerPreview.title}</p>
+                  <p className="tickets-preview-details">{composerPreview.details}</p>
+                  <p className="tickets-composer-preferences-text">
+                    Review this carefully. Click Send Ticket only when it looks right.
+                  </p>
+                </div>
+              ) : null}
+
               <div className="tickets-composer-preferences">
                 <div className="tickets-composer-preferences-copy">
                   <p className="tickets-composer-preferences-kicker">Ticket preferences</p>
@@ -1121,9 +1202,15 @@ export default function TicketsPage() {
                 className="tickets-create-button"
                 onClick={handleCreateTicket}
                 disabled={isCreatingTicket || ticketRateLimit?.remaining === 0}
-                aria-label={isCreatingTicket ? "Creating ticket" : "Create ticket"}
+                aria-label={isCreatingTicket ? "Creating ticket" : composerPreview ? "Send ticket" : "Preview ticket"}
               >
-                {isCreatingTicket ? <span className="tickets-button-loader" aria-hidden="true" /> : "Create Ticket"}
+                {isCreatingTicket ? (
+                  <span className="tickets-button-loader" aria-hidden="true" />
+                ) : composerPreview ? (
+                  "Send Ticket"
+                ) : (
+                  "Preview Ticket"
+                )}
               </button>
 
               {ticketCreateError ? (

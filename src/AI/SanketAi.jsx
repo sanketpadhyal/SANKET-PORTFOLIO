@@ -1,6 +1,6 @@
 import { ArrowUp, ArrowUpRight, MessagesSquare, Square, Trash2, X } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
-import { callAI } from "../api-calls/apicalls"
+import { callAI, callTicketAgent, getJWTToken } from "../api-calls/apicalls"
 import "./SanketAi.css"
 
 const CHAT_STORAGE_KEY = "sanket-ai-chat"
@@ -69,6 +69,26 @@ const getSuggestedActions = (text) => {
   }
 
   return actions
+}
+
+const isTicketAgentMessage = (text, lastAssistantMessage = null) => {
+  const lower = text.toLowerCase()
+  const pendingTicketDraft = lastAssistantMessage?.content
+    ?.toLowerCase()
+    .includes("please send a short title")
+
+  if (pendingTicketDraft) {
+    return true
+  }
+
+  if (/title\s*[:=]/i.test(text) || /(?:details|description)\s*[:=]/i.test(text)) {
+    return true
+  }
+
+  return (
+    /\btickets?\b/.test(lower) &&
+    /\b(create|raise|open|make|submit|file|add|show|list|read|check|status|reply|replies|replied|current|latest|recent|my)\b/.test(lower)
+  )
 }
 
 export default function SanketAi({ isOpen, onClose, initialPrompt = "", initialPromptId = null, onInitialPromptConsumed }) {
@@ -151,7 +171,25 @@ export default function SanketAi({ isOpen, onClose, initialPrompt = "", initialP
       const controller = new AbortController()
       abortControllerRef.current = controller
 
-      const res = await callAI(trimmed, controller.signal)
+      const lastAssistantMessage = [...messages].reverse().find((message) => message.role === "assistant")
+      const jwtToken = getJWTToken()
+      const shouldUseTicketAgent = jwtToken && isTicketAgentMessage(trimmed, lastAssistantMessage)
+
+      const res = shouldUseTicketAgent
+        ? await callTicketAgent(trimmed, jwtToken, controller.signal)
+        : await callAI(trimmed, controller.signal)
+
+      if (shouldUseTicketAgent && res.ok && typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("tickets-agent-updated", {
+          detail: {
+            action: res.data?.action,
+            tickets: res.data?.tickets,
+            createdTicket: res.data?.createdTicket,
+            remaining: res.data?.remaining,
+            total: res.data?.total
+          }
+        }))
+      }
 
       if (!res.ok) {
         setMessages((prev) => [
@@ -171,12 +209,19 @@ export default function SanketAi({ isOpen, onClose, initialPrompt = "", initialP
 
       const reply = (res.data.reply || "No response").trim()
       const assistantId = `assistant-${Date.now()}`
-      const suggestedActions = getSuggestedActions(trimmed)
+      const suggestedActions = shouldUseTicketAgent
+        ? [
+            {
+              label: "Open Tickets",
+              href: "/contact/tickets"
+            }
+          ]
+        : getSuggestedActions(trimmed)
 
       setIsTyping(false)
       setIsStreaming(true)
-  isTypingRef.current = false
-  isStreamingRef.current = true
+      isTypingRef.current = false
+      isStreamingRef.current = true
       abortControllerRef.current = null
 
       setMessages((prev) => [

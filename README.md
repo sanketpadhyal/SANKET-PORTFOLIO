@@ -26,6 +26,7 @@ If this project helps you learn, build, or ship something faster, a star would g
 ## Features
 
 - ✨ **Portfolio experience** — responsive home page, skills, project highlights, loading screen, smooth desktop scrolling, and low-performance mode for lighter devices.
+- 🌑 **Modes** - Supports Both Dark & Light Modes.
 - 🧩 **Projects showcase** — GitHub-inspired project cards, share/copy actions, and custom repository detail pages.
 - 💬 **Sanket AI** — floating assistant interface with saved chat history, suggested prompts, streamed responses, quick actions, and Groq-powered backend replies.
 - 📮 **Contact tickets** — Google sign-in flow, profile preferences, private ticket creation, reply tracking, and support-style conversation screens.

@@ -107,7 +107,7 @@ npm run dev --prefix backend
 
 Made by **Sanket Padhyal**.
 
-- **Email:** sanketpadhyal3@gmail.com
+- **Email:** sanketpadhyal3@gmail.com, sanket99e@gmail.com
 - **GitHub:** [@sanketpadhyal](https://github.com/sanketpadhyal)
 
 ## License
